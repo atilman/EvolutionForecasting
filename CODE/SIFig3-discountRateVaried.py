@@ -8,19 +8,14 @@ a script that test the sucess of invasions against the discount rate
 """
 
 import pylab as plt
-#from scipy.integrate import solve_ivp
 import numpy as np
-#from scipy.fftpack import fft
-#from multiprocessing import Pool
 import SimulationBackbone as sb
-import random as rand
 import time
-
+#%%
 "GENERAL PARAMS"
 eps1 = 3/10;
 eps2 = 1/10;
 rVals=np.arange(1/100,35/100,1/100);
-#rVals = np.array([1/10000,1/1000,1/100,1/10,2/10,3/10,4/10,5/10])
 C = 5/1000;
 DT_L1 = 2;
 dt_H0 = 1;
@@ -31,9 +26,11 @@ popSize=100
 invFrac=1/popSize
 Linv=990/100
 
+"THIS TAKES MANY HOURS TO RUN, CONSIDER JUST LOADING OUTPUT FROM PREVIOUS SIM"
+
 "SAVE???"
-save='yes'
-tag=str(rand.random())[2:5]
+save='ys'
+
 
 "SIM"
 zLm0 = 3/10
@@ -43,18 +40,18 @@ tFinal = 10000
 simStart=time.time()
 D = sb.invasionVary(eps1,eps2,rVals,C,DT_L1,dt_H0,dt_L0,DT_H1,zLm0,n0,tEnd,tFinal,sims,invFrac,Linv)
 simEnd=time.time()
-print(str((simEnd-simStart)/60)[0:6]+'minutes')
 if save == 'yes':
-    np.save('../FIGS/InvasionSuccessRate'+tag+'.npy',D)
+    np.save('../FIGS/SIFig3-InvasionSuccessRate.npy',D)
 #%%
 """
 PLOTS
 """
-"Set tag manually if desired"
-tag='894'
+
 save='yes'
-Data = np.load('../FIGS/InvasionSuccessRate'+tag+'.npy',allow_pickle=True)
+Data = np.load('../FIGS/SIFig3-InvasionSuccessRate.npy',allow_pickle=True)
 xfMal = Data[0]
+sims = Data[3]
+invFrac = Data[14]
 rVals = Data[6]
 InvProb = np.empty((len(rVals)),dtype=object)
 forecasterFreq = np.empty((len(rVals)),dtype=object)
@@ -77,9 +74,8 @@ for i in range(len(rVals)):
         freqWhenFail[i] = failAvg / (sims-count)
 fig1 = plt.figure(figsize=(8,4))
 ax1 = fig1.add_subplot(111)
-#ax1.set_xscale('log')
+
 ax1.plot(rVals,forecasterFreq,'*', label = 'Long-run fraction of forecasters, given invasion')
-#ax1.plot(rVals,freqWhenFail,'*', label = 'Forecaster long-run frequency when invasion fails')
 ax1.plot(rVals,InvProb,'*',label='Invasion probability')
 ax1.set_title("Invasion outcomes")
 ax1.set_xlabel('Discount rate, r')

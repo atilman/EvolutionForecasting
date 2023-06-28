@@ -9,9 +9,9 @@ Created on Mon Jan 28 13:26:51 2019
 import numpy as np
 from scipy.integrate import solve_ivp
 from multiprocessing import Pool
-import pylab as plt
+# import pylab as plt
 from scipy.fftpack import fft
-import matplotlib.animation as animation
+# import matplotlib.animation as animation
 
 def invasion(eps1,eps2,r,C,DT_L1,dt_H0,dt_L0,DT_H1,zLm0,n0,tEnd,tFinal,sims,invFrac,Linv):
     """

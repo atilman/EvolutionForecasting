@@ -6,16 +6,11 @@ Created on Tue May 19 14:48:49 2020
 @author: atilman
 """
 import pylab as plt
-#from PIL import Image
-#import os
+
 from scipy.integrate import solve_ivp
 import numpy as np
-#from scipy.fftpack import fft
-#from multiprocessing import Pool
 import SimulationBackbone as sb
-#import random as rand
-#import time
-#import matplotlib.animation as animation
+
 
 "GENERAL PARAMS"
 eps1 = 3/10;
@@ -151,16 +146,19 @@ for i in range (len(t2)):
 #%%
 "PLOTS"
 "PlotColors"
-import seaborn as sns
 forecasterColor = "darkorchid"             
 myopicColor = "darkcyan"
 ENVc = 'gold'
-LMc = sns.set_hls_values(color = myopicColor, h = None, l = .5, s = .25)
-HMc = sns.set_hls_values(color = myopicColor, h = None, l = None, s = 1)
-LFc = sns.set_hls_values(color = forecasterColor, h = None, l = None, s = .35)
-HFc = sns.set_hls_values(color = forecasterColor, h = None, l = None, s = 1)
-mFit = sns.set_hls_values(color = myopicColor, h = None, l = None, s = .65)
-fFit = sns.set_hls_values(color = forecasterColor, h = None, l = None, s = .57)
+
+LMc = (0.375, 0.625, 0.625)
+HMc = (0.0, 0.5450980392156861, 0.5450980392156862)
+LFc = (0.5568983957219252, 0.32372549019607844, 0.6723529411764706)
+HFc = (0.6662083015024193, 0.0, 0.996078431372549)
+mFit = (0.0953921568627451, 0.449705882352941, 0.4497058823529411)
+fFit = (0.593895594601477, 0.21415686274509815, 0.7819215686274509)
+sInv = (0.8235294117647058, 0.0, 0.0)
+uInv = (0.4941176470588235, 0.32941176470588235, 0.32941176470588235)
+
 opac = .5
 "PlotWidths"
 envWidth = 2
@@ -172,7 +170,6 @@ tLen = 50
 fig1 = plt.figure(figsize=(15,5))
 ax11 = fig1.add_subplot(1,3,1)
 ax11.set_title("Myopic dynamics")
-#ax11.set_ylabel('State variables')
 ax11.set_xlabel('Time')
 ax11.set_xlim((0,tLen))
 ax11.set_ylim((0,1))
@@ -185,7 +182,6 @@ ax11.legend(loc='upper right')
 
 ax12 = fig1.add_subplot(132)
 ax12.set_title('Forecaster dynamics')
-#ax12.set_ylabel('State variables')
 ax12.set_xlabel('Time')
 ax12.set_xlim(0,tLen)
 ax12.set_ylim((0,1))
@@ -199,7 +195,6 @@ ax12.legend(loc='upper right')
 ax13 = fig1.add_subplot(133)
 ax13.set_title('Coexistence of myopic and forecasting types')
 ax13.set_xlabel('Time')
-#ax13.set_ylabel('State variables')
 ax13.set_xlim(tEndInv-tLen,tEndInv)
 ax13.set_ylim((0,1))
 ax13.set_yticks((0,.2,.4,.6,.8,1))
@@ -222,7 +217,6 @@ tEndInv1 = 3000
 ax21 = fig2.add_subplot(211)
 ax21.set_title("Successful invasion dynamics")
 ax21.set_xlabel('Time')
-#ax21.set_ylabel('State variables')
 ax21.set_xlim((0,tEndInv1))
 ax21.set_ylim((0,1))
 ax21.set_yticks((0,.2,.4,.6,.8,1))
@@ -249,7 +243,7 @@ inset.set_yticks([])
 
 
 
-# az0 = fig4.add_subplot(325)
+
 ax22 = fig2.add_subplot(212)
 ax22.set_title("Invasion fitness")
 ax22.set_xlabel("Time")
@@ -262,15 +256,12 @@ ax22.plot(t2,fitAvgInvF,color = fFit,linewidth=2,alpha=opac,label='Forecaster fi
 
 ax22.plot((0,t[-1]),(fitAvgM[-1],fitAvgM[-1]),linestyle = 'dashed', color = HMc,label='Myopic-only long-run fitness')
 ax22.plot((0,t[-1]),(fitFore[-1] - C,fitFore[-1] - C),linestyle = 'dashed',color = HFc, label='Forecaster-only long-run fitness')
-#ax22.plot((0,t[-1]),(1.6274,1.6274),linestyle = 'dashed',color ='k', label='Optimal long-run fitness')
 ax22.legend(loc='upper right')
-# az0.legend(loc = 'upper right')
 
 "set axes bounds"
 invMax = np.max(fitAvgInvF)
 yMin = np.min(fitAvgM) - .1*(np.max((fitFore[-1],invMax)) - np.min(fitAvgM))
 yMax = np.max((fitFore[-1],invMax)) + .1*(np.max((fitFore[-1],invMax)) - np.min(fitAvgM))
-# az0.set_ylim((yMin,yMax))
 ax22.set_ylim((yMin,yMax))
 ax22.set_ylim((1.35,1.75))
 ax22.set_xlim((0,tEndInv1))
@@ -302,11 +293,11 @@ final = 'yes'
 if save=='yes' and final != 'yes':
     pars1 = ax11.annotate(paramZ, (0,0), (-30, -30), xycoords='axes fraction', textcoords='offset points', va='top',fontsize=6)
     pars2 = ax22.annotate(paramZ, (0,0), (-30, -30), xycoords='axes fraction', textcoords='offset points', va='top',fontsize=6)
-    fig1.savefig('../FIGS/mainTextFig1.png',dpi=300,bbox_extra_artists=(pars1,), bbox_inches='tight')
-    fig2.savefig('../FIGS/mainTextFig2.png',dpi=300,bbox_extra_artists=(pars1,), bbox_inches='tight')
+    fig1.savefig('../FIGS/Fig3.png',dpi=300,bbox_extra_artists=(pars1,), bbox_inches='tight')
+    fig2.savefig('../FIGS/Fig4.png',dpi=300,bbox_extra_artists=(pars1,), bbox_inches='tight')
 if save=='yes' and final == 'yes':
-        fig1.savefig('../FIGS/mainTextFig1.png',dpi=300, bbox_inches='tight')
-        fig2.savefig('../FIGS/mainTextFig2.png',dpi=300, bbox_inches='tight')
+        fig1.savefig('../FIGS/Fig3.png',dpi=300, bbox_inches='tight')
+        fig2.savefig('../FIGS/Fig4.png',dpi=300, bbox_inches='tight')
 
 
 

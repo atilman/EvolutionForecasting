@@ -15,7 +15,8 @@ import random as rand
 from scipy.integrate import solve_ivp
 import SimulationBackbone as sb
 "Do you want to save this simulation figure???"
-save = 'yes'
+
+save = 'ys'
 
 "PARAMS"
 eps1 = 3/10 #env feedback speed (relative to strategy switching speed)
@@ -32,11 +33,12 @@ tEnd = [800,800,2000]
 args = (eps1,eps2,r,C,d00,d10,d01,d11)
 
 "COLORS"
-import seaborn as sns
 forecasterColor = "darkorchid"               # HTML name
 myopicColor = "darkcyan"
-mFit = sns.set_hls_values(color = myopicColor, h = None, l = None, s = .65)
-fFit = sns.set_hls_values(color = forecasterColor, h = None, l = None, s = .57)
+
+
+mFit = (0.0953921568627451, 0.449705882352941, 0.4497058823529411)
+fFit = (0.593895594601477, 0.21415686274509815, 0.7819215686274509)
 
 for i in range(3):
     "INITIAL CONDITIONS"
@@ -57,8 +59,6 @@ for i in range(3):
     "Post-Invasion simulation"
     popSize=[100,100,100]
     y1m01 = y1mPre[-1]
-    #y1f01 = 99/100 #alomst all L-Strat
-    #y1f01 = 1/100 #almost all H-Strat
     y1f01 = y1mPre[-1] #same frac as myopics
     xf01 = 1/popSize[i]
     n01 = nPre[-1]
@@ -87,48 +87,6 @@ for i in range(3):
     postEnd = len(t)
     
     
-    # "TEMPORAL DYNAMICS PLOTS"
-    # fig1 = plt.figure(figsize=(10,10))
-    # fig3 = plt.figure(figsize=(10,5))
-    # ax0 = fig3.add_subplot(1,1,1)
-    # ax1 = fig1.add_subplot(2,1,1)
-    # #fig2 = plt.figure(figsize=(10,5))
-    # ax2 = fig1.add_subplot(2,1,2)
-    # "PRE-invasion"
-    # ax1.plot(tPre,nPre, 'y-',alpha=1, lineWidth=2, label='Environmental state')
-    # ax2.plot(tPre,y1mPre, 'r-',alpha=1, lineWidth=2,label='freq of S1 among myopic')
-    
-    # "InvasionPoint"
-    # ax1.plot([tInv],[xf01],'go',markersize=12)
-    # ax2.plot([tInv],[y1f01],'bo',markersize=12)
-    # ax2.plot([tInv],[y1[0]],'ko',markersize=12)
-    # ax0.plot([tInv],[xf01],'go',markersize=12)
-    
-    # "POST-invasion"
-    # ax1.plot(t,xf, 'g-',alpha=.51,lineWidth=2, label='freq of forecasters')
-    # ax2.plot(t,y1f, 'b-',alpha=.51,lineWidth=2, label='freq of S1 among forecasting')
-    # ax1.plot(t,n, 'y-',alpha=1,lineWidth=2)
-    # ax2.plot(t,y1m, 'r-',alpha=.51,lineWidth=2)
-    # ax2.plot(t,y1,'k-',alpha=.51,lineWidth=2, label='S1 in population')
-    # ax0.plot(t,xf,'g-',linewidth=2, label='freq of forecasters')
-    
-    # "Plot settings"
-    # ax0.set_yscale('log')
-    # ax0.set_xlim((pltInv,pltEnd))
-    # ax1.set_ylim((0,1))
-    # ax2.set_ylim((0,1))
-    # ax1.set_xlim((pltStart,pltEnd))
-    # ax2.set_xlim((pltStart,pltEnd))
-    # ax1.set_title("Temporal Dynamics")
-    # ax1.set_xlabel("Time")
-    # ax1.grid()
-    # ax1.legend(loc='best')
-    # #ax2.set_title("Temporal Dynamics")
-    # ax2.set_xlabel("Time")
-    # ax2.grid()
-    # ax2.legend(loc='best')
-    
-    
     #%%
     "PHASE DIAGRAMS"
     fig2 = plt.figure(figsize=(10,5))
@@ -154,8 +112,6 @@ for i in range(3):
     "InvasionPoint"
     ax30.plot([y1[0]],[n01],'ko',markersize=12)
     ax31.plot([y1[0]],[n01],'ko',markersize=12)
-    # ax31.plot([y1f01],[n01],'bo',markersize=12)
-    # ax31.plot([y1m01],[n01],'ro',markersize=12)
     
     "Plot settings"
     ax30.set_xlim((0,1))
@@ -172,44 +128,16 @@ for i in range(3):
     ax31.legend(loc='best')
     
     
-    paramAnnote='eps1='+str(eps1)+', eps2='+str(eps2)+', r='+str(r)+', C='+str(C)+', d11='+str(d11)+', d00='+str(d00)+', d10='+str(d10)+', d01='+str(d01)+', tStart='+str(tStart)+', tInv='+str(tInv[i])+', tEnd='+str(tEnd[i])+', y1m0='+str(y1m0)+', n0='+str(n0)+', y1f01='+str(y1f01)[0:5]+', xf01='+str(xf01)[0:5]+', y1m01='+str(y1m01)[0:5]+', n01='+str(n01)[0:5]+', pltEnd='+str(pltEnd)+', phaseFrac='+str(phaseFrac)+', invFrac='+str(invFrac)         
+    # paramAnnote='eps1='+str(eps1)+', eps2='+str(eps2)+', r='+str(r)+', C='+str(C)+', d11='+str(d11)+', d00='+str(d00)+', d10='+str(d10)+', d01='+str(d01)+', tStart='+str(tStart)+', tInv='+str(tInv[i])+', tEnd='+str(tEnd[i])+', y1m0='+str(y1m0)+', n0='+str(n0)+', y1f01='+str(y1f01)[0:5]+', xf01='+str(xf01)[0:5]+', y1m01='+str(y1m01)[0:5]+', n01='+str(n01)[0:5]+', pltEnd='+str(pltEnd)+', phaseFrac='+str(phaseFrac)+', invFrac='+str(invFrac)         
     #pars1 = ax2.annotate(paramAnnote, (0,0), (-20, -40), xycoords='axes fraction', textcoords='offset points', va='top',fontsize=6)
     
     #pars2 = ax30.annotate(paramAnnote, (0,0), (-20, -40), xycoords='axes fraction', textcoords='offset points', va='top',fontsize=6)
     
     if save == 'yes':
-        tag=str(rand.random())[2:8]
-        tag=['a','b','c']#just so we don't save a gazillion files right now
-        # fig1.savefig('FIGS/'+'invasionDynam'+tag+'.pdf',bbox_extra_artists=(pars1,), bbox_inches='tight')
+        tag=['a','b','c']
         fig2.savefig('../FIGS/'+'SIFig1'+tag[i]+'.png',dpi=300, bbox_inches='tight')
     
-    
-    #%%
-#"FITNESS ADVANTAGE PLOT"
-#fitPlotEnd=tEnd
-#window=15
-#g = (1-n)*(d10*y1 + d00*(1-y1)) - n*(d11*y1 + d01*(1-y1))
-#fitAdvFore = (y1f-y1m)*g-C
-#"Moving average"
-#
-#tAvg = np.linspace(pltInv+window,fitPlotEnd,fitPlotEnd-pltInv-window+1)
-#fitAdvSmooth = np.zeros(len(tAvg))
-#for i in range(len(tAvg)):
-#    AVG = 0
-#    for j in range(len(t)):
-#        if t[j]<tAvg[i] and t[j]>tAvg[i]-window:
-#            AVG = AVG + fitAdvFore[j]*(t[j]-t[j-1])
-#    fitAdvSmooth[i]=AVG/window
-#
-#fig4 = plt.figure(figsize=(10,10))
-#ax40 = fig4.add_subplot(1,1,1)
-#ax40.plot(t,fitAdvFore, 'y-',alpha=1,lineWidth=2)
-#ax40.plot((pltInv,fitPlotEnd),(0,0),'k--',linewidth=3)
-#ax40.plot(tAvg,fitAdvSmooth,'k-',linewidth=1)
-#
-#
-#ax40.set_xlim((pltInv,fitPlotEnd))
-##ax40.set_ylim((np.min(fitAdvSmooth),np.max(fitAdvSmooth)))
+
 
 
 

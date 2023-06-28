@@ -7,13 +7,11 @@ Created on Tue Jul 21 10:03:18 2020
 INV SIMULATION
 """
 import pylab as plt
-#from scipy.integrate import solve_ivp
 import numpy as np
-#from scipy.fftpack import fft
-#from multiprocessing import Pool
+
 import SimulationBackbone as sb
-import random as rand
-#import time
+
+
 
 "GENERAL PARAMS"
 eps1 = 3/10;
@@ -29,16 +27,13 @@ popSize=550
 invFrac=1/popSize
 Linv=990/100
 
-"NAME TAG"
-tag=str(rand.random())[2:5]
-tag = "100"
 "SIMULATION"
 zLm0 = 3/10
 n0 = 9/10
 tEnd = 800
 tFinal = 15000
 dataOut = sb.invasion(eps1,eps2,r,C,DT_L1,dt_H0,dt_L0,DT_H1,zLm0,n0,tEnd,tFinal,sims,invFrac,Linv)
-np.save('../FIGS/mainTextFig3_'+tag+'.npy',dataOut)
+np.save('../FIGS/Fig5-Invasion.npy',dataOut)
 #%%
 """
 PLOTTING
@@ -46,12 +41,11 @@ PLOTTING
 
 "SAVE???"
 save = 'ys'
-final = 'yes'
+final = 'ys'
 
-"MANUALLY SET TAG"
-tag = '100'
+
 "Read in data"
-output = np.load('../FIGS/mainTextFig3_'+tag+'.npy',allow_pickle=True)
+output = np.load('../FIGS/Fig5-Invasion.npy',allow_pickle=True)
 
 "Set Vars"
 simOut = output[0]
@@ -70,6 +64,7 @@ tEnd = output[2]
 tFinal = output[3]
 sims = output[4]
 invFrac = output[15]
+popSize = 1/invFrac
 Linv = output[16]
 solFore = output[17]
 
@@ -84,27 +79,22 @@ InvStart = np.argmax(t>t[-1]-oneCycle)
 tInvStart = t[InvStart]
 
 tPlotEnd = np.min((10000,tFinal))
-#XFc = 'g-'
-# ENVc = 'y-'
-# LMc = 'c-'
-# HMc = 'm-'
-# LFc = 'darkorchid'
-# HFc = 'r-'
+
 
 "PlotColors"
-import seaborn as sns
+
 forecasterColor = "darkorchid"               # HTML name
 myopicColor = "darkcyan"
 freqColor = "dimgrey"
 ENVc = 'y'
-LMc = sns.set_hls_values(color = myopicColor, h = None, l = None, s = .25)
-HMc = sns.set_hls_values(color = myopicColor, h = None, l = None, s = 1)
-LFc = sns.set_hls_values(color = forecasterColor, h = None, l = None, s = .15)
-HFc = sns.set_hls_values(color = forecasterColor, h = None, l = None, s = 1)
-mFit = sns.set_hls_values(color = myopicColor, h = None, l = None, s = .65)
-fFit = sns.set_hls_values(color = forecasterColor, h = None, l = None, s = .57)
-sInv = sns.set_hls_values(color = freqColor, h = None, l = None, s = 1)
-uInv = sns.set_hls_values(color = freqColor, h = None, l = None, s = .2)
+LMc = (0.375, 0.625, 0.625)
+HMc = (0.0, 0.5450980392156861, 0.5450980392156862)
+LFc = (0.5568983957219252, 0.32372549019607844, 0.6723529411764706)
+HFc = (0.6662083015024193, 0.0, 0.996078431372549)
+mFit = (0.0953921568627451, 0.449705882352941, 0.4497058823529411)
+fFit = (0.593895594601477, 0.21415686274509815, 0.7819215686274509)
+sInv = (0.8235294117647058, 0.0, 0.0)
+uInv = (0.4941176470588235, 0.32941176470588235, 0.32941176470588235)
 opac = .5
 "PlotWidths"
 envWidth = 2
@@ -123,13 +113,6 @@ inset = plt.axes([.56, 0.65, .1, .2])
 inset.set_xlim((tInvStart-.1*oneCycle,tEnd+oneCycle))
 inset.set_ylim((.68*invFrac,1.05*invFrac))
 
-
-#inset.set_yscale('log')
-# inset.plot(t,n,ENVc,linewidth=2,alpha=1,label='Env state')
-# inset.plot(t,zLm,LMc,linewidth=1,alpha=.5,label='freq of L-strategy mypoic')
-# inset.plot(t,zHm,HMc,linewidth=1,alpha=.5,label='freq of H-strategy mypoic')
-# inset.plot(t,zLf,LFc,linewidth=1,alpha=.5,label='freq of L-strategy forecasting')
-# inset.plot(t,zHf,HFc,linewidth=1,alpha=.5,label='freq of H-strategy forecasting')
 inset.set_xticks([])
 inset.set_yticks([])
 
@@ -183,8 +166,6 @@ for j in range(int(sims)):
         ax2.plot(tPost,xfPost,color = sInv,alpha=opac)
         if j%8==0:
             inset.plot(tPost,xfPost,color = sInv,linewidth=1,alpha=1)
-        # ax3.plot(xLfPost[phaseStart:],nPost[phaseStart:],color = LFc,linewidth=2,alpha=.3)
-        # ax3.plot(xLmPost[phaseStart:],nPost[phaseStart:],color = LMc,linewidth=2,alpha=.3)
     else:
         ax2.plot(tPost,xfPost,color = uInv,alpha=opac)
         if j%8==0:
@@ -243,9 +224,9 @@ paramZ = ('eps1 = '+str(eps1)[0:5]
 
 if save=='yes' and final != 'yes':
     pars1 = ax3.annotate(paramZ, (0,0), (-30, -30), xycoords='axes fraction', textcoords='offset points', va='top',fontsize=6)
-    fig2.savefig('../FIGS/mainTextFig3_'+tag+'.png',dpi=300,bbox_extra_artists=(pars1,), bbox_inches='tight')
+    fig2.savefig('../FIGS/Fig5.png',dpi=300,bbox_extra_artists=(pars1,), bbox_inches='tight')
 if save=='yes' and final == 'yes':
-    fig2.savefig('../FIGS/mainTextFig3.png',dpi=300, bbox_inches='tight')
+    fig2.savefig('../FIGS/Fig5.png',dpi=300, bbox_inches='tight')
 
 
 
