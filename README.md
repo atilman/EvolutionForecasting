@@ -1,4 +1,4 @@
-## The evolution of forecasting for decision making in dynamic environments
+## [The evolution of forecasting for decision making in dynamic environments](https://doi.org/10.1177/26339137231221726)
 #### Andrew R. Tilman, Vítor V. Vasconcelos, Erol Akçay, and Joshua B. Plotkin
 
 Climate change and technological advances are reshaping ecosystems and societies. Strategic choices that were best
